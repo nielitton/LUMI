@@ -84,3 +84,28 @@ npm run start:dev
 
 ## Iniciar o projeto no front-end
 
+1. **Para iniciar o projeto no front end**
+
+Para iniciar o frontEnd, será necessário entrar no projeto do front, no seu terminal digite.
+
+```bash
+cd lumi-front
+```
+
+2. **Instalando as dependências**
+
+Depois de estar no projeto do front, vamos instalar as nossas dependências
+
+```bash
+npm install
+```
+
+3. **Com todas as nossas dependências instaladas**
+
+Depois de instalar todas as nossas dependências, vamos iniciar o front
+
+```bash
+npm run dev
+```
+
+Isso iniciará o nosso projeto, no seu terminal terá o endereço/link de onde você pode estar acessando o nosso projeto.
