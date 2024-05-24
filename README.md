@@ -81,3 +81,6 @@ npm run start:dev
 - GET: pdf/<NÚMERODOPDF> - Headers: 'Content-Type': 'application/pdf'
 - GET: /invoices - (você poderá pesquisar as faturas por númeri di cliente assim -> /invoices?clientNumber=<número>)
 - POST: /pdf-extractor/extract -(Você deverá enviar um arquivo PDF para este endpoint)
+
+## Iniciar o projeto no front-end
+
