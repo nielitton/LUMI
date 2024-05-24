@@ -109,3 +109,9 @@ npm run dev
 ```
 
 Isso iniciará o nosso projeto, no seu terminal terá o endereço/link de onde você pode estar acessando o nosso projeto.
+
+ou você pode copiar a seguir
+
+```bash
+http://localhost:3000
+```
