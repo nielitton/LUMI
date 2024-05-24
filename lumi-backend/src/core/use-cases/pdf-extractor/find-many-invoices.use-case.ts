@@ -6,7 +6,7 @@ import { PdfExtractorRepository } from "src/core/repositories/pdf-extractor/pdf-
 
 @Injectable()
 export class FindManyInvoicesUseCase {
-    constructor(private readonly repository: PdfExtractorRepository) {}
+    constructor(private readonly repository: PdfExtractorRepository) { }
 
     async execute({ clientNumber }: FilterInvoicesDto) {
         const where: Where<PdfExtractedEntity> = {
@@ -15,6 +15,10 @@ export class FindManyInvoicesUseCase {
             ]
         }
 
-        return await this.repository.findMany({where})
+        const count = await this.repository.count({ where })
+
+        const invoices = await this.repository.findMany({ where })
+
+        return { invoices, count }
     }
 }

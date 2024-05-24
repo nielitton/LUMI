@@ -7,8 +7,8 @@ import { DbQueryFilter } from "src/core/models/dto/db-query-filter.dto";
 
 @Injectable()
 export class PrismaPdfExtractorRepository implements PdfExtractorRepository {
-    constructor(private prisma: PrismaService) {}
-    
+    constructor(private prisma: PrismaService) { }
+
     async create(pdfExtractedData: PdfExtractedDto): Promise<PdfExtractedEntity> {
         return this.prisma.invoice.create({
             data: pdfExtractedData
@@ -21,6 +21,12 @@ export class PrismaPdfExtractorRepository implements PdfExtractorRepository {
             skip: filter?.skip,
             take: filter?.take,
             orderBy: filter.orderBy,
+        })
+    }
+
+    async count(filter?: DbQueryFilter): Promise<number> {
+        return await this.prisma.invoice.count({
+            where: filter?.where
         })
     }
 

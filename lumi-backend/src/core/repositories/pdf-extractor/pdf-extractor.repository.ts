@@ -6,4 +6,5 @@ export abstract class PdfExtractorRepository {
     abstract create(pdfBuffer: PdfExtractedDto): Promise<PdfExtractedEntity>
     abstract findMany(filter?: DbQueryFilter): Promise<PdfExtractedEntity[]>
     abstract findByNumber(number: string): Promise<PdfExtractedEntity>
+    abstract count(filter?: DbQueryFilter): Promise<number>
 }
