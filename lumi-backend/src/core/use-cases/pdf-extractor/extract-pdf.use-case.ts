@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { BusinessException } from "src/core/exception/businnes-exception";
+import { BusinessException } from "../../exception/businnes-exception";
 import { PdfExtractedEntity } from "src/core/models/entities/pdf-extracted.entity";
-import { PdfExtractorRepository } from "src/core/repositories/pdf-extractor/pdf-extractor.repository";
+import { PdfExtractorRepository } from "../../repositories/pdf-extractor/pdf-extractor.repository";
 import PDFExtract from 'pdf-parse';
 import * as AWS from "aws-sdk"
-import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME } from "src/core/environments/envitoment";
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME } from "../../environments/enviroment";
 
 @Injectable()
 export class ExtractPdfInfosUseCase {
@@ -20,7 +20,7 @@ export class ExtractPdfInfosUseCase {
 
     async execute(buffer: Buffer): Promise<PdfExtractedEntity> {
         const pdfExtract = await PDFExtract(buffer, {});
-        
+
         const invoice = pdfExtract.text
         const lines = invoice.split('\n');
 
@@ -33,12 +33,12 @@ export class ExtractPdfInfosUseCase {
         const totalValueIndex = lines.findIndex(line => line.includes('Referente a'));
         const totalValueLine = lines[totalValueIndex + 1]
         const totalValue = totalValueLine.split(' ').filter(item => item.trim() !== "")[2];
-    
+
         // buscando referência
         const referenciaIndex = lines.findIndex(line => line.includes('Referente a'));
         const referenceValues = lines[referenciaIndex + 1]
         const referenceMonth = referenceValues.split(' ').filter(item => item.trim() !== "")[0];
-    
+
         // Buscando número do cliente
         const clientNumberIndex = lines.findIndex(line => line.includes('DO CLIENTE'))
         const clientNumberValues = lines[clientNumberIndex + 1]
@@ -80,29 +80,29 @@ export class ExtractPdfInfosUseCase {
 
         const invoiceExist = await this.repository.findByNumber(invoiceNumber)
 
-        if(invoiceExist) {
+        if (invoiceExist) {
             throw new BusinessException("Fatura já importada", 400)
         }
-        
+
         const params = {
             Bucket: S3_BUCKET_NAME,
             Key: invoiceNumber,
             Body: buffer,
         }
-        
+
         await this.s3.upload(params).promise();
-        const data: PdfExtractedEntity =  {
+        const data: PdfExtractedEntity = {
             clientNumber,
             totalValue,
             invoiceNumber,
             referenceMonth,
-            eletricEnergyKwh: electricEnergy.electricEnergyQuantity,
-            eletricEnergyValue: electricEnergy.electricEnergyValue,
-            compensedEnergyKwh: compensedEnergy.compensedEnergyValuesQuantity,
-            compensedEnergyValue: compensedEnergy.compensedEnergyValuesValue,
+            eletricEnergyKwh: electricEnergy.electricEnergyQuantity || '',
+            eletricEnergyValue: electricEnergy.electricEnergyValue || '',
+            compensedEnergyKwh: compensedEnergy.compensedEnergyValuesQuantity || '',
+            compensedEnergyValue: compensedEnergy.compensedEnergyValuesValue || '',
             sceeEnergyKwh: sceeEnergy.energySceeQuantity,
-            sceeEnergyValue: sceeEnergy.energySceeValue,
-            publicContrib: publicEnergyValue
+            sceeEnergyValue: sceeEnergy.energySceeValue || '',
+            publicContrib: publicEnergyValue || ''
         };
 
         return await this.repository.create(data)

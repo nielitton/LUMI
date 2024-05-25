@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { Where } from "src/core/models/dto/db-query-filter.dto";
-import { FilterInvoicesDto } from "src/core/models/dto/filter-invoices.dto";
-import { PdfExtractedEntity } from "src/core/models/entities/pdf-extracted.entity";
-import { PdfExtractorRepository } from "src/core/repositories/pdf-extractor/pdf-extractor.repository";
+import { Where } from "../../models/dto/db-query-filter.dto";
+import { FilterInvoicesDto } from "../../models/dto/filter-invoices.dto";
+import { PdfExtractedEntity } from "../../models/entities/pdf-extracted.entity";
+import { PdfExtractorRepository } from "../../repositories/pdf-extractor/pdf-extractor.repository";
 
 @Injectable()
 export class FindManyInvoicesUseCase {
