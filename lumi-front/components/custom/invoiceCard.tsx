@@ -13,20 +13,22 @@ export const InvoiceCard = ({
   eletricEnergyValue,
   referenceMonth,
   clientNumber,
+  publicContrib,
+  compensedEnergyKwh,
+  compensedEnergyValue,
+  sceeEnergyKwh,
+  sceeEnergyValue,
 }: IInvoice) => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null)
 
   const handleDownload = async () => {
     try {
-      // Faz a solicitação para baixar o PDF
       const response = await UseDownloadInvoice(invoiceNumber || '')
 
-      // Obtém o URL do PDF da resposta
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
       const pdfUrl = URL.createObjectURL(pdfBlob)
       setPdfUrl(pdfUrl)
 
-      // Abrir a tela de impressão
       window.open(pdfUrl)
     } catch (error) {
       console.error('Erro ao baixar o PDF:', error)
@@ -52,7 +54,7 @@ export const InvoiceCard = ({
       <p className="text-gray-400">
         Energia eletrica (kwh):{' '}
         <span className="text-green-spotify font-semibold">
-          {eletricEnergyKwh}kwh
+          {eletricEnergyKwh} kwh
         </span>
       </p>
       <p className="text-gray-400">
@@ -65,6 +67,36 @@ export const InvoiceCard = ({
         Referente a:{' '}
         <span className="text-green-spotify font-semibold">
           {referenceMonth}
+        </span>
+      </p>
+      <p className="text-gray-400">
+        Energia SCEE (kwh):{' '}
+        <span className="text-green-spotify font-semibold">
+          {sceeEnergyKwh} kwh
+        </span>
+      </p>
+      <p className="text-gray-400">
+        Energia SCEE:{' '}
+        <span className="text-green-spotify font-semibold">
+          {sceeEnergyValue}
+        </span>
+      </p>
+      <p className="text-gray-400">
+        Energia Compensada (kwh):{' '}
+        <span className="text-green-spotify font-semibold">
+          {compensedEnergyKwh} kwh
+        </span>
+      </p>
+      <p className="text-gray-400">
+        Energia Compensada:{' '}
+        <span className="text-green-spotify font-semibold">
+          {compensedEnergyValue}
+        </span>
+      </p>
+      <p className="text-gray-400">
+        Contrib Publica:{' '}
+        <span className="text-green-spotify font-semibold">
+          {publicContrib}
         </span>
       </p>
       <Button

@@ -54,8 +54,9 @@ export default function Home() {
     return sortedInvoices?.map((invoice) => {
       const totalSemGD = Number(
         (
-          formatNumber(invoice.eletricEnergyValue || '') +
-          formatNumber(invoice.sceeEnergyValue || '')
+          formatNumber(invoice.eletricEnergyValue || '0') +
+          formatNumber(invoice.sceeEnergyValue || '0') +
+          formatNumber(invoice.publicContrib || '0')
         ).toFixed(2),
       )
 
@@ -90,11 +91,11 @@ export default function Home() {
             <LineChartsCustomKwh dataKwh={dataChartsKwh || []} />
             <div className="flex gap-2 justify-center">
               <span className="text-[#0E632C]">
-                Energia compensada: ENERCOMP
+                Energia compensada (kwh): ENERCOMP
               </span>
               -
               <span className="text-green-spotify">
-                Consumo de energia: CONENER
+                Consumo de energia (kwh): CONENER
               </span>
             </div>
           </div>

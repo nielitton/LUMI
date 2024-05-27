@@ -108,6 +108,11 @@ export default function Invoices() {
             totalValue={invoice.totalValue}
             referenceMonth={invoice.referenceMonth}
             clientNumber={invoice.clientNumber}
+            publicContrib={invoice.publicContrib}
+            compensedEnergyKwh={invoice.compensedEnergyKwh}
+            compensedEnergyValue={invoice.compensedEnergyValue}
+            sceeEnergyKwh={invoice.sceeEnergyKwh}
+            sceeEnergyValue={invoice.sceeEnergyValue}
           />
         ))}
       </div>
