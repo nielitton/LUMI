@@ -35,9 +35,16 @@ Com o comando
 npm install
 ```
 
-3. **Após as dependências instaladas**
+**Após as dependências instaladas**
 
-Precisamos gerar o prisma
+3. **Precisamos gerar o database das faturas**
+
+Para fazer isso, digite o seguinte comando
+```bash
+npx prisma migrate dev --name first
+```
+
+Após isso certifique-se de gerar o prisma
 ```bash
 npx prisma generate
 ```
