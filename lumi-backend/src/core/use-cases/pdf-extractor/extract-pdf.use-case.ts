@@ -24,6 +24,8 @@ export class ExtractPdfInfosUseCase {
         const invoice = pdfExtract.text
         const lines = invoice.split('\n');
 
+        console.log(lines)
+
         // Buscando número da nota físcal
         const invoiceNumberIndex = lines.findIndex(line => line.includes('NOTA FISCAL'));
         const invoiceNumberLine = lines[invoiceNumberIndex]
@@ -46,6 +48,7 @@ export class ExtractPdfInfosUseCase {
 
         // Buscando energia elétrica
         const electricEnergyIndex = lines.findIndex(line => line.includes('Energia Elétrica'))
+
         const electricEnergyValues = lines[electricEnergyIndex]
         const electricEnergyParts = electricEnergyValues.split(' ').filter(item => item.trim() !== "")
 
@@ -55,25 +58,30 @@ export class ExtractPdfInfosUseCase {
         const electricEnergy = { electricEnergyQuantity, electricEnergyValue }
 
         // Buscando energia sceee
-        const energySceeeValues = lines[electricEnergyIndex + 1]
-        const energySceee = energySceeeValues.split(' ').filter(item => item.trim() === '' || /^\d+$/.test(item.trim().replace(/,/g, ''))).filter(item => item.trim() !== '');
+        const energySceeeIndex = lines.findIndex(line => line.includes('SCEE'))
+        const energySceeeValues = lines[energySceeeIndex]
+        const energySceee = energySceeeValues ? energySceeeValues.split(' ').filter(item => item.trim() !== "").filter(item => item !== 's/') : '0'
 
-        const energySceeQuantity = energySceee[0]
-        const energySceeValue = energySceee[2]
+        const energySceeQuantity = Array(energySceee) ? energySceee[3] : '0'
+        const energySceeValue = Array(energySceee) ? energySceee[5] : '0'
 
         const sceeEnergy = { energySceeQuantity, energySceeValue }
 
         // Buscando energia compensada
-        const compensedEnergyLine = lines[electricEnergyIndex + 2]
-        const compensedEnergyValues = compensedEnergyLine.split(' ').filter(item => item.trim() !== "")
+        const compensedEnergyIndex = lines.findIndex(line => line.includes('compensada'))
+        const compensedEnergyLine = lines[compensedEnergyIndex]
 
-        const compensedEnergyValuesQuantity = compensedEnergyValues[4]
-        const compensedEnergyValuesValue = compensedEnergyValues[6]
+        const compensedEnergyValues = compensedEnergyLine ? compensedEnergyLine.split(' ').filter(item => item.trim() !== "") : '0'
+
+        const compensedEnergyValuesQuantity = Array(compensedEnergyValues) ? compensedEnergyValues[4] : '0'
+        const compensedEnergyValuesValue = Array(compensedEnergyValues) ? compensedEnergyValues[6] : '0'
 
         const compensedEnergy = { compensedEnergyValuesQuantity, compensedEnergyValuesValue }
 
         // Buscando contribuição de iluminação pública
-        const publicEnergyLine = lines[electricEnergyIndex + 3]
+        const publicEnergyIndex = lines.findIndex(line => line.includes('Publica'))
+        const publicEnergyLine = lines[publicEnergyIndex]
+        console.log(publicEnergyLine)
         const publicEnergyValues = publicEnergyLine.split(' ').filter(item => item.trim() !== "")[4]
 
         const publicEnergyValue = publicEnergyValues
@@ -96,13 +104,13 @@ export class ExtractPdfInfosUseCase {
             totalValue,
             invoiceNumber,
             referenceMonth,
-            eletricEnergyKwh: electricEnergy.electricEnergyQuantity || '',
-            eletricEnergyValue: electricEnergy.electricEnergyValue || '',
-            compensedEnergyKwh: compensedEnergy.compensedEnergyValuesQuantity || '',
-            compensedEnergyValue: compensedEnergy.compensedEnergyValuesValue || '',
-            sceeEnergyKwh: sceeEnergy.energySceeQuantity,
-            sceeEnergyValue: sceeEnergy.energySceeValue || '',
-            publicContrib: publicEnergyValue || ''
+            eletricEnergyKwh: electricEnergy.electricEnergyQuantity || '0',
+            eletricEnergyValue: electricEnergy.electricEnergyValue || '0',
+            compensedEnergyKwh: compensedEnergy.compensedEnergyValuesQuantity || '0',
+            compensedEnergyValue: compensedEnergy.compensedEnergyValuesValue || '0',
+            sceeEnergyKwh: sceeEnergy.energySceeQuantity || "0",
+            sceeEnergyValue: sceeEnergy.energySceeValue || '0',
+            publicContrib: publicEnergyValue || '0'
         };
 
         return await this.repository.create(data)
