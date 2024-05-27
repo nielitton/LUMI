@@ -93,6 +93,8 @@ npm run start:dev
 
 1. **Para iniciar o projeto no front end**
 
+**Precisamos abrir outro terminal e entrar na pasta do projeto LUMI**
+
 Para iniciar o frontEnd, será necessário entrar no projeto do front, no seu terminal digite.
 
 ```bash
@@ -117,7 +119,7 @@ npm run dev
 
 Isso iniciará o nosso projeto, no seu terminal terá o endereço/link de onde você pode estar acessando o nosso projeto.
 
-ou você pode copiar a seguir
+ou você pode copiar a seguir, caso você tenha outra porta com o número 3000 sendo usada, ele irá mudar para outra porta, irá lhe dizer no terminal em que porta esta rodando.
 
 ```bash
 http://localhost:3000
