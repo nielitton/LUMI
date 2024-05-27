@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as AWS from "aws-sdk"
-import { BusinessException } from "src/core/exception/businnes-exception";
+import { BusinessException } from "../../../core/exception/businnes-exception";
 
 @Injectable()
 export class S3Service {
@@ -19,8 +19,8 @@ export class S3Service {
         try {
             const { Body } = await this.s3.getObject(params).promise();
             return Body as Buffer;
-        } catch(error) {
-            if(error.statusCode === 404) {
+        } catch (error) {
+            if (error.statusCode === 404) {
                 throw new BusinessException("Fatura não encontrada", 404)
             }
         }

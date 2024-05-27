@@ -14,6 +14,7 @@ import {
 import { UseGetInvoices } from '@/hooks/useGetInvoices'
 import { IDataChartsKwh, IDataChartsValue } from '@/models/invoice-entity'
 import { formatNumber } from '@/utils/formatNumbers'
+import { getMonthNumber } from '@/utils/monthNumber'
 import { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 
@@ -23,20 +24,6 @@ const getInvoices = async (clientNumber?: string | null) => {
 
 export default function Home() {
   const [client, setClient] = useState<string | null>(null)
-  const monthNames = [
-    'jan',
-    'fev',
-    'mar',
-    'abr',
-    'mai',
-    'jun',
-    'jul',
-    'ago',
-    'set',
-    'out',
-    'nov',
-    'dez',
-  ]
 
   const { data: invoicesData } = useQuery({
     queryKey: ['invoices', client],
@@ -44,13 +31,6 @@ export default function Home() {
   })
 
   const dataChartsKwh = useMemo<IDataChartsKwh[] | [] | undefined>(() => {
-    const getMonthNumber = (monthName: string) => {
-      const index = monthNames.findIndex(
-        (month) => month === monthName.toLowerCase(),
-      )
-      return index !== -1 ? index + 1 : 0
-    }
-
     const sortedInvoices = invoicesData?.invoices.sort((a, b) => {
       const monthA = getMonthNumber(a.referenceMonth?.split('/')[0] || '')
       const monthB = getMonthNumber(b.referenceMonth?.split('/')[0] || '')
@@ -65,13 +45,6 @@ export default function Home() {
   }, [invoicesData])
 
   const dataChartsValue = useMemo<IDataChartsValue[] | [] | undefined>(() => {
-    const getMonthNumber = (monthName: string) => {
-      const index = monthNames.findIndex(
-        (month) => month === monthName.toLowerCase(),
-      )
-      return index !== -1 ? index + 1 : 0
-    }
-
     const sortedInvoices = invoicesData?.invoices.sort((a, b) => {
       const monthA = getMonthNumber(a.referenceMonth?.split('/')[0] || '')
       const monthB = getMonthNumber(b.referenceMonth?.split('/')[0] || '')

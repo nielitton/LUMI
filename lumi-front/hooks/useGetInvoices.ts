@@ -1,5 +1,5 @@
-import { api } from '@/api/api'
-import { IInvoice } from '@/models/invoice-entity'
+import { api } from '../api/api'
+import { IInvoice } from '../models/invoice-entity'
 
 export const UseGetInvoices = async (clientNumber?: string | null) => {
   return (

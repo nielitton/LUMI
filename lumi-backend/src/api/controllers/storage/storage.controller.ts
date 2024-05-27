@@ -1,9 +1,9 @@
 import { Controller, Post, UploadedFile, UseInterceptors, Get, Param, Res } from '@nestjs/common';
-import { S3Service } from 'src/api/services/s3-storage/s3.service';
+import { S3Service } from '../../services/s3-storage/s3.service';
 
 @Controller('pdf')
 export class GetPdfController {
-  constructor(private readonly s3Service: S3Service) {}
+  constructor(private readonly s3Service: S3Service) { }
 
   @Get(':fileName')
   async downloadPdf(@Param('fileName') fileName: string, @Res() res: any): Promise<void> {

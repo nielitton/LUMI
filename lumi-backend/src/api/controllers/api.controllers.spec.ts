@@ -3,12 +3,15 @@ import { PdfExtractorService } from "../services/pdf-extractor/pdf-extractor.ser
 import { FilterInvoicesDto } from '../../core/models/dto/filter-invoices.dto';
 import { FindManyInvoicesController } from '../controllers/pdf-extractor/find-many-invoices.controller';
 import { PdfExtractorController } from './pdf-extractor/pdf-extractor.controller';
-import { PdfExtractedEntity } from 'src/core/models/entities/pdf-extracted.entity';
+import { GetPdfController } from './storage/storage.controller';
+import { S3Service } from '../services/s3-storage/s3.service';
 
 describe('FindManyInvoicesController', () => {
-    let findManyController: FindManyInvoicesController;
+    let findManyController: FindManyInvoicesController
     let extractPdfController: PdfExtractorController
-    let service: PdfExtractorService;
+    let s3Service: S3Service
+    let storageController: GetPdfController
+    let service: PdfExtractorService
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -40,5 +43,43 @@ describe('FindManyInvoicesController', () => {
             expect(service.findMany).toHaveBeenCalledWith(query);
         });
 
+    });
+
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [GetPdfController],
+            providers: [
+                {
+                    provide: S3Service,
+                    useValue: {
+                        getFileUrl: jest.fn().mockResolvedValue(Buffer.from('PDF_CONTENT')),
+                    },
+                },
+            ],
+        }).compile();
+
+        storageController = module.get<GetPdfController>(GetPdfController);
+        s3Service = module.get<S3Service>(S3Service);
+    });
+
+    it('should be defined', () => {
+        expect(storageController).toBeDefined();
+    });
+
+    describe('downloadPdf', () => {
+        it('should download the PDF file', async () => {
+            const fileName = 'example.pdf';
+            const res = {
+                setHeader: jest.fn(),
+                send: jest.fn(),
+            };
+
+            await storageController.downloadPdf(fileName, res);
+
+            expect(s3Service.getFileUrl).toHaveBeenCalledWith(fileName);
+            expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'application/pdf');
+            expect(res.setHeader).toHaveBeenCalledWith('Content-Disposition', `attachment; filename="${fileName}"`);
+            expect(res.send).toHaveBeenCalledWith(Buffer.from('PDF_CONTENT'));
+        });
     });
 });
