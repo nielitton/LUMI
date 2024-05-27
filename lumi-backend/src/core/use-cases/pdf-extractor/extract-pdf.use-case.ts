@@ -24,8 +24,6 @@ export class ExtractPdfInfosUseCase {
         const invoice = pdfExtract.text
         const lines = invoice.split('\n');
 
-        console.log(lines)
-
         // Buscando número da nota físcal
         const invoiceNumberIndex = lines.findIndex(line => line.includes('NOTA FISCAL'));
         const invoiceNumberLine = lines[invoiceNumberIndex]
@@ -81,7 +79,6 @@ export class ExtractPdfInfosUseCase {
         // Buscando contribuição de iluminação pública
         const publicEnergyIndex = lines.findIndex(line => line.includes('Publica'))
         const publicEnergyLine = lines[publicEnergyIndex]
-        console.log(publicEnergyLine)
         const publicEnergyValues = publicEnergyLine.split(' ').filter(item => item.trim() !== "")[4]
 
         const publicEnergyValue = publicEnergyValues
