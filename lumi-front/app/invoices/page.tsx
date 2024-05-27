@@ -61,7 +61,7 @@ export default function Invoices() {
   }
 
   return (
-    <section className="flex flex-col gap-5 p-4 justify-start">
+    <section className="w-full flex flex-col gap-5 p-4 justify-start">
       <div className="flex flex-col lg:flex-row justify-between gap-2 items-center">
         <h1 className="text-[20px] font-semibold text-green-spotify">
           Biblioteca de faturas
