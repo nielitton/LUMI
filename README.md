@@ -48,7 +48,21 @@ AWS_REGION="us-east-2"
 S3_BUCKET_NAME="lumibucketteste"
 ```
 
-3. **Precisamos gerar o database das faturas**
+3. **Antes de gerar o prisma**
+
+Será necessário criar um container no docker, é muito simples, em seu terminal digite o seguinte
+Caso você não tenha a imagem do postgress instalado, ele automaticamente irá instala-la. (Isso demora um pouco).
+
+```bash
+docker run --name lumi -e POSTGRES_USER=lumi -e POSTGRES_PASSWORD=1234 -e POSTGRES_DB=lumi -p 5432:5432 -d postgres
+```
+
+Certifique-se de que o seu container está rodando, com o comando
+```bash
+docker ps
+```
+
+4. **Precisamos gerar o database das faturas**
 
 Para fazer isso, digite o seguinte comando
 ```bash
@@ -58,18 +72,6 @@ npx prisma migrate dev --name first
 Após isso certifique-se de gerar o prisma
 ```bash
 npx prisma generate
-```
-
-4. **Após o prisma gerado**
-
-Após isso, será necessário criar um container no docker, é muito simples, em seu terminal digite o seguinte
-```bash
-docker run --name lumi -e POSTGRES_USER=lumi -e POSTGRES_PASSWORD=1234 -e POSTGRES_DB=lumi -p 5432:5432 -d postgres
-```
-
-Certifique-se de que o seu container está rodando, com o comando
-```bash
-docker ps
 ```
 
 Isso irá lhe fornecer as variáveis de ambiente necessárias para iniciar a nossa API.
@@ -83,8 +85,8 @@ npm run start:dev
 
 6. **Os endpoints da aplicação são**
 
-- GET: pdf/<NÚMERODOPDF> - Headers: 'Content-Type': 'application/pdf'
-- GET: /invoices - (você poderá pesquisar as faturas por númeri di cliente assim -> /invoices?clientNumber=<número>)
+- GET: pdf/<NÚMERODOPDF> - Headers: 'Content-Type': 'application/pdf' (Irá lhe retornar o pdf para baixar).
+- GET: /invoices - (Busca todas as faturas, você poderá pesquisar as faturas por número do cliente assim -> /invoices?clientNumber=<número>)
 - POST: /pdf-extractor/extract -(Você deverá enviar um arquivo PDF para este endpoint)
 
 ## Iniciar o projeto no front-end
